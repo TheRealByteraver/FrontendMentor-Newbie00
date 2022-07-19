@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap" rel="stylesheet">
+  
+  <title>Frontend Mentor | Interactive rating component</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border: none;
+      font-family: 'Overpass', sans-serif;
+    }
+
+    .card-flex-container {
+      background-color: hsl(216, 12%, 8%);
+      color: hsl(217, 12%, 63%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      height: 100vh;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .card {
+      background-color: hsl(213, 19%, 18%);
+      border-radius: 1.5rem;
+      color: aqua;
+      margin: auto;
+      min-width: 300px;
+      max-width: 400px;
+      padding: 1.5rem;
+    }
+
+    .star-image {
+      background-color: hsla(217, 12%, 63%, 0.1);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      height: 3rem;
+      width: 3rem;
+      padding: 1rem;
+    }
+
+    h1 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: hsl(217, 12%, 63%);
+      font-size: 15px;
+      line-height: 1.5rem;
+      font-weight: bold;
+    }
+
+    .score {
+      background-color: hsla(217, 12%, 63%, 0.1);
+      color: hsl(217, 12%, 63%);
+      border-radius: 50%;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      font-weight: bold;
+      height: 3rem;
+      width: 3rem;
+    }
+
+    .selected {
+      background: hsl(217, 12%, 63%);
+      color: white;
+    }
+
+    .score:hover {
+      color: white;
+      background: hsl(25, 97%, 53%);
+    }
+
+    ol {
+      list-style: none;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 1.5rem 0;
+      width: 100%;
+    }
+
+    .submit-button {
+      background-color: hsl(25, 97%, 53%);
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: .15rem;
+      font-size: 15px;
+      width: 100%;
+      border-radius: 1.5rem;
+      height: 3rem;
+    }    
+
+    .submit-button:hover {
+      background: white;
+      color: hsl(25, 97%, 53%);
+    }
+
+    .attribution { 
+      font-size: 11px; 
+      text-align: center; 
+      color: white;
+      position: absolute;
+      bottom: 0;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .attribution a { 
+      color: hsl(228, 45%, 44%); 
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .thankyou-image {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .score-text-container {
+      display: flex;
+      justify-content: center;
+      margin: 2rem auto;
+      width: 100%;
+    }
+
+    .score-text {      
+      background-color: hsla(217, 12%, 63%, 0.1);
+      color:hsl(25, 97%, 53%);
+      display: block;
+      font-weight: 400;
+      height: 2rem;
+      line-height: 2rem;
+      border-radius: 1rem;
+      padding: 0 1rem;
+    }
+
+    .thankyou-text {
+      text-align: center;
+    }
+
+    .thankyou-header {
+      text-align: center;
+    }
+  </style>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      // DOM is loaded, now execute this inline script
+
+      // set score to invalid value:
+      let score = -1;
+
+      // Score select logic
+      const scoreBox = document.querySelector('ol');
+      scoreBox.addEventListener('click', event => {
+        // exit if the user didn't click on a score circle
+        if (event.target.tagName !== 'LI') return;
+
+        // get all score DOM li elements
+        const lis = scoreBox.querySelectorAll('li');
+
+        // update the DOM: unselect previous score, if any
+        if (score >= 0) {
+          lis[score].classList.remove('selected');
+        }
+
+        // set the new score. Arrays are zero-indexed but
+        // the score starts from 1, so we substract one
+        score = +event.target.innerText - 1;
+
+        // update the DOM to show the selected score
+        lis[score].classList.add('selected');
+      });
+
+      // Submit button logic
+      const submitButton = document.querySelector('button.submit-button');
+      submitButton.addEventListener('click', event => {
+        // only submit if user clicked a score
+        if (score < 0) return;
+
+        // switch cards (hide the first, show the second)
+        const cards = document.querySelectorAll('section.card');
+        cards[0].classList.add('hidden');
+        cards[1].classList.remove('hidden');
+
+        // Add score to text inside thank-you card
+        const scoreText = document.querySelector('p.score-text');
+        scoreText.innerText = `You selected ${(score + 1).toString()} out of 5`;
+      });
+      // end of inline script
+    });    
+  </script>
+</head>
+
+<body>
+  <div class="card-flex-container">
+    <section class="card">
+      <div class="star-image"><img src="images/icon-star.svg" alt="Star"/></div>
+      <h1 class="title">How did we do?</h1>
+      <p class="motivational">Please let us know how we did with your support request. All feedback is appreciated 
+        to help us improve our offering!
+      </p>
+      <ol>
+        <li class="score">1</li>
+        <li class="score">2</li>
+        <li class="score">3</li>
+        <li class="score">4</li>
+        <li class="score">5</li>
+      </ol>
+      <button class="submit-button">Submit</button>
+    </section>
+  
+    <!-- Thank you state card -->
+    <section class="card hidden">
+      <div class="thankyou-image"><img src="images/illustration-thank-you.svg" alt="Thank you"/></div>
+  
+      <div class="score-text-container"><p class="score-text"></p></div>
+  
+      <h1 class="thankyou-header">Thank you!</h1>
+  
+      <p class="thankyou-text">We appreciate you taking the time to give a rating. If you ever need more support, 
+      don’t hesitate to get in touch!</p>
+    </section>
+  </div>
+  
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Erland Van Olmen</a>.
+  </div>
+  
+</body>
+</html>
